@@ -5,11 +5,11 @@ const multer = require('../middleware/multer-config');
 
 const saucesCtrl = require('../controllers/sauces');
 
-router.get('/'+'',auth, saucesCtrl.getAllThing );
-router.post('/',auth, multer, saucesCtrl.createThing );
-router.get('/:id',auth, saucesCtrl.getOneThing) ;
-router.put('/:id',auth, saucesCtrl.modifyThing);
-router.delete('/:id',auth, saucesCtrl.deleteThing);
+router.get('/'+'',auth, saucesCtrl.getAllSauces );
+router.post('/',auth, multer, saucesCtrl.createSauces );
+router.get('/:id',auth, saucesCtrl.getOneSauces) ;
+router.put('/:id',auth, saucesCtrl.modifySauces);
+router.delete('/:id',auth, saucesCtrl.deleteSauces);
 
 
 
