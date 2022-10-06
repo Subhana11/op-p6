@@ -1,6 +1,6 @@
 // in controllers/saucesnode .js
 
-const Thing = require('../models/thing');
+const Thing = require('../models/thing.js');
 
 exports.createThing = (req, res, next) => {
   const thing = new Thing({
@@ -15,6 +15,7 @@ exports.createThing = (req, res, next) => {
       res.status(201).json({
         message: 'Post saved successfully!'
       });
+      console.log(thing);
     }
   ).catch(
     (error) => {
