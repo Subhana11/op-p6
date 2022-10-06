@@ -3,7 +3,7 @@
 const Thing = require('../models/thing');
 
 exports.createThing = (req, res, next) => {
-  const thingObject = JSON.parse(req.body.sauce);
+  const thingObject = JSON.parse(req.body.thing);
   delete thingObject._id;
   delete thingObject._userId;
   const thing = new Thing({
