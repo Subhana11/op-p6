@@ -9,7 +9,9 @@ exports.createSauces = (req, res, next) => {
   const sauces = new Sauces({
       ...saucesObject,
       userId: req.auth.userId,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      likes: 0,
+      dislikes: 0
   });
 
   sauces.save()
@@ -86,4 +88,72 @@ exports.getAllSauces = (req, res, next) => {
       });
     }
   );
+};
+exports.likeSauces = async (req, res) => {
+  const likeStatus = req.body.like;
+  const authUserId = req.auth.userId;
+  const filterById = { _id: req.params.id };
+
+  const addLike = {
+    $inc: { likes: +1 },
+    $push: { usersLiked: authUserId },
+  };
+  const addDislike = {
+    $inc: { dislikes: +1 },
+    $push: { usersDisliked: authUserId },
+  };
+  const removeLike = {
+    $inc: { likes: -1 },
+    $pull: { usersLiked: authUserId },
+  };
+  const removeDislike = {
+    $inc: { dislikes: -1 },
+    $pull: { usersDisliked: authUserId },
+  };
+
+  try {
+    const sauces = await Sauces.findOne(filterById);
+    switch (likeStatus) {
+      case 1: {
+        if (!sauces.usersLiked.includes(authUserId)) {
+          await Sauces.findOneAndUpdate(filterById, addLike, { new: true });
+          res.status(201).json({ message: `You like ${sauces.name} sauces ` });
+        } else {
+          return;
+        }
+
+        break;
+      }
+      case -1: {
+        if (!sauces.usersDisliked.includes(authUserId)) {
+          await Sauces.findOneAndUpdate(filterById, addDislike, { new: true });
+          res.status(201).json({ message: `You dislike ${sauces.name} sauces` });
+        } else {
+          return;
+        }
+
+        break;
+      }
+      case 0: {
+        if (sauces.usersLiked.includes(authUserId)) {
+          await Sauces.findOneAndUpdate(filterById, removeLike, { new: true });
+          res
+            .status(201)
+            .json({ message: `You removed your like on ${sauces.name}` });
+        } else if (sauces.usersDisliked.includes(authUserId)) {
+          await Sauces.findOneAndUpdate(filterById, removeDislike, {
+            new: true,
+          });
+          res.status(201).json({
+            message: `You removed your dislike on ${sauces.name} sauces`,
+          });
+        } else {
+          return;
+        }
+        break;
+      }
+    }
+  } catch (error) {
+    res.status(400).json(error);
+  }
 };
