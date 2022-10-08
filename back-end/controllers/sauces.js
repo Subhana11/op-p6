@@ -13,7 +13,6 @@ exports.createSauces = (req, res, next) => {
       likes: 0,
       dislikes: 0
   });
-
   sauces.save()
   .then(() => { res.status(201).json({message: 'sauce enregistré !'})})
   .catch(error => { res.status(400).json( { error })})
