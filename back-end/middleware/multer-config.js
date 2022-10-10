@@ -1,10 +1,14 @@
+// appel du plugin multer
 const multer = require('multer');
 
+// définition des type accéptés
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
+
+// Définition du storage
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'images');

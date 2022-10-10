@@ -1,5 +1,7 @@
+// importation de bcrypt pour hasher le password
 const bcrypt = require('bcrypt');
 const User = require ('../models/user');
+// importation de jsonwebtoken
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {

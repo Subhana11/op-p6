@@ -1,6 +1,7 @@
-
+// file system, pour modifier et supprimer des fichiers
 const fs = require('fs');
 const Sauces = require('../models/sauces');
+
 
 exports.createSauces = (req, res, next) => {
   const saucesObject = JSON.parse(req.body.sauce);
@@ -17,8 +18,9 @@ exports.createSauces = (req, res, next) => {
   .then(() => { res.status(201).json({message: 'sauce enregistré !'})})
   .catch(error => { res.status(400).json( { error })})
 };
-
+// appel d'une sauces avec request, result, next
 exports.getOneSauces = (req, res, next) => {
+  // demande à la base de donnés avec Find
   Sauces.findOne({
     _id: req.params.id
   }).then(
@@ -88,6 +90,8 @@ exports.getAllSauces = (req, res, next) => {
     }
   );
 };
+
+// Appel des likes avec request et result
 exports.likeSauces = async (req, res) => {
   const likeStatus = req.body.like;
   const authUserId = req.auth.userId;

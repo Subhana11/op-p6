@@ -1,5 +1,7 @@
+// importation du package mongoose pour la DB
 const mongoose = require('mongoose');
 
+// définition du schema pour mongoose sous forme JSON(string, number, array)
 const saucesSchema = mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },
